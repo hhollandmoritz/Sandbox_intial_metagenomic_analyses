@@ -5,15 +5,11 @@
 
 # Define variables; FILL THIS PART IN
 PROJ_DIR=/data/hollandh/CitSciSandbox/Metagenomic_analyses
-OUTPUTS=$PROJ_DIR/outputs
-LOGS=$PROJ_DIR/logs
-STAGE=01_preprocess
-STAGE_OUT_DIR=$OUTPUTS/$STAGE
-STAGE_LOG_DIR=$LOGS/$STAGE
+STAGE_DIR=$PROJ_DIR/01_preprocess
 SCRIPT_DIR=$PROJ_DIR/scripts/01_run_fastqc.sh # location of script file
 IN_DIR=$PROJ_DIR/00_raw_data # location of raw fastq files
-OUT_DIR=$STAGE_OUT_DIR/00_qual_check # location of output quality assessment files
-LOG_DIR=$STAGE_LOG_DIR/00_qual_check # Location of logs from quality assessment
+OUT_DIR=$STAGE_DIR/00_qual_check
+LOG_DIR=$OUT_DIR/logs
 # Parallel variables
 # Note: on proteus CORES*ntasks should not exceed 32
 CORES=5 # number of cores for fastqc to use
@@ -22,7 +18,7 @@ ntasks=6
 # Move into datafile
 cd $IN_DIR
 
-# make a directories to put outputs and logs
+# make a directories to put outputs
 mkdir -p $OUT_DIR
 mkdir -p $LOG_DIR
 

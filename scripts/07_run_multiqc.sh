@@ -14,4 +14,7 @@ cd $STAGE_DIR
 
 mkdir -p $MULT_QC_DIR
 
-multiqc 00_qual_check 01_cutadapt_transposase_commands 01_qual_check 02_qual_check -o $MULT_QC_DIR -c 05_multiqc_config.yaml -n 03_multiqc_report_post_cleaning.html --interactive -f
+multiqc 00_qual_check 01_qual_trim_transposase 01_qual_check 02_qual_check \
+        -o $MULT_QC_DIR -c $PROJ_DIR/scripts/07_multiqc_config.yaml \
+        -n 03_multiqc_report_post_cleaning.html \
+        --interactive -f

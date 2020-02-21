@@ -26,10 +26,11 @@ mkdir -p $LOG_DIR
 
 j=0
 # make commands and write them to a file
-for i in $(ls *.fastq.gz)
+for i in $(ls *R1*.fastq.gz)
 do
     # move J forward by 1
     printf -v j '%03d' $((10#$j + 1)) 
+    echo $j
 
     ## Arrange the variables
     prefix=${i%_R*.*}
@@ -46,9 +47,10 @@ do
     mkdir -p $OUTPUT_DIR
 
     # run the sickle command
+    echo "Running Sickle on $infile1 and $infile2"
     sickle pe -f $infile1 -r $infile2 \
     -t sanger -o $outfile1 -p $outfile2 \
-    -s $outfile3 -q $QUAL -l $LENG &> logfile_name &
+    -s $outfile3 -q $QUAL -l $LENG &> $logfile_name &
 
     # create non-leading zero version
     jeval=$(expr $j + 0)

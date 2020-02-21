@@ -11,10 +11,27 @@
 ## Pipeline
 ### 1) Clean data
 
-  * script to run fastqc
+  * run fastqc
+  	- inputs: raw fastq files
+  	- outputs: fastqc outputs
   * multiqc
-  * run cutadapt and sickle
+  	- inputs: fastqc outputs
+  	- outputs: multiqc report
+  * run cutadapt
+  	- inputs: raw fastq files
+  	- outputs: adapter trimmed fastq files
+  * run fastqc again
+       - inputs: adapter trimmed fastq files
+       - outputs: fastqc outputs
+  * run sickle
+       - inputs: adapter trimmed fastq files
+       - outputs: qual-trimmed fastq files
+  * run fastqc again
+       - intputs: qual-trimmed fastq files 
+       - outputs: fastqc outputs
   * run multiqc again
+       - inputs: All three fastqc outputs
+       - outputs: final multiqc qual report
 
 ### 2) Read-based analyses of taxonomy
 

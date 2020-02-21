@@ -16,8 +16,8 @@ OUT_DIR=$STAGE_OUT_DIR/00_qual_check # location of output quality assessment fil
 LOG_DIR=$STAGE_LOG_DIR/00_qual_check # Location of logs from quality assessment
 # Parallel variables
 # Note: on proteus CORES*ntasks should not exceed 32
-CORES=8 # number of cores for fastqc to use
-ntasks=2
+CORES=5 # number of cores for fastqc to use
+ntasks=6
 
 # Move into datafile
 cd $IN_DIR
@@ -30,15 +30,22 @@ j=0
 # make commands and write them to a file
 for i in $(ls *.fastq.gz)
 do
+    # move J forward by 1
+    printf -v j '%03d' $((10#$j + 1)) 
     
+
     ## Arrange the variables
     prefix=${i%.*.*}
     echo $prefix
     infile="$IN_DIR"/"$prefix".fastq.gz
     echo $infile
     outfile="$prefix".fastq.gz
-    logfile_name=$LOG_DIR/"$prefix"_fastqc.log
+    logfile_name="$LOG_DIR"/"$prefix"_fastqc.log
+    # echo $logfile_name
+    # echo $CORES
+    # echo $ntasks
     
+
     ## Writing the batch script (note: formatting without indentation here is imporant)
 
     # cd into the output directory
@@ -46,7 +53,7 @@ do
     mkdir -p $OUT_DIR # Make output directory before running
 
     # Run Fastqc command
-    #fastqc $infile -o $OUT_DIR -t $CORES --extract > logfile_name
+    fastqc $infile -o $OUT_DIR -t $CORES --extract &> $logfile_name &
 
     # create non-leading zero version
     jeval=$(expr $j + 0)
@@ -59,4 +66,6 @@ do
 
 done
 
-
+echo "DONE"
+echo "outputs can be found at $OUT_DIR"
+echo "logs can be found at $LOG_DIR"

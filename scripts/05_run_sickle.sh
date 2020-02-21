@@ -10,7 +10,7 @@ PROJ_DIR=/data/hollandh/CitSciSandbox/Metagenomic_analyses
 STAGE_DIR=$PROJ_DIR/01_preprocess
 DATA_DIR=$STAGE_DIR/01_qual_trim_transposase # location of the input files
 OUTPUT_DIR=$STAGE_DIR/02_sickle_qual_filt # location to put sickle-processed files
-LOG_DIR=$OUT_DIR/logs
+LOG_DIR=$OUTPUT_DIR/logs
 # Parallel variables
 # Note: on proteus ntasks should not exceed 32
 ntasks=30
@@ -38,14 +38,17 @@ do
     outfile1="$OUTPUT_DIR"/"$prefix"_R1_qual_filt.fastq
     outfile2="$OUTPUT_DIR"/"$prefix"_R2_qual_filt.fastq
     outfile3="$OUTPUT_DIR"/"$prefix"_singles_qual_filt.fastq
-    command_file_name=$COMMAND_DIR/"$prefix"_sickle_command.sbatch
+    logfile_name=$LOG_DIR/"$prefix"_sickle.log
+
     
     ## Running command
     # make a directory for the output
     mkdir -p $OUTPUT_DIR
 
     # run the sickle command
-    sickle pe -f $infile1 -r $infile2 -t sanger -o $outfile1 -p $outfile2 -s $outfile3 -q $QUAL -l $LENG 
+    sickle pe -f $infile1 -r $infile2 \
+    -t sanger -o $outfile1 -p $outfile2 \
+    -s $outfile3 -q $QUAL -l $LENG &> logfile_name &
 
     # create non-leading zero version
     jeval=$(expr $j + 0)
